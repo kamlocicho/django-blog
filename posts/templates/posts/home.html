@@ -1,0 +1,30 @@
+{% extends "project/base.html" %}
+
+{% block title %}
+Home Page
+{% endblock %}
+
+{% block content %}
+<h2>Browse posts</h2>
+
+{% for post in posts %}
+<div class="card">
+    <div class="card-header">
+        <h5>{{post.author.username}}-{{post.author.email}}</h5>
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">{{post.title}}</h5>
+        <p class="card-text">{{post.content}}</p>
+        {% if user == post.author or perms.posts.delete_post %}
+        <form method="post">
+            {% csrf_token %}
+            <button class="btn btn-danger" name="delete" value="{{post.id}}">Delete post</button>
+        </form>
+        {% endif %}
+    </div>
+</div>
+{% empty %}
+<h3>Unfortunately no posts available here.</h3>
+{% endfor %}
+
+{% endblock %}
